@@ -1,0 +1,5 @@
+_src_stm_kld:  F_1 : 85.33% 
+Accuracy : 88.78% 
+Precision : 94.12% 
+Recall : 78.05% 
+F_1 : 85.33% 

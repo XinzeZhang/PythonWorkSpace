@@ -1,0 +1,5 @@
+_src_sentiment:  F_1 : 70.59% 
+Accuracy : 60.94% 
+Precision : 56.60% 
+Recall : 93.75% 
+F_1 : 70.59% 

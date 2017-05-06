@@ -1,0 +1,5 @@
+_src_kld_sct:  F_1 : 81.16% 
+Accuracy : 86.73% 
+Precision : 100.00% 
+Recall : 68.29% 
+F_1 : 81.16% 

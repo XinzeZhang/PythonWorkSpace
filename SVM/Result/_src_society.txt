@@ -1,0 +1,5 @@
+_src_society:  F_1 : 82.86% 
+Accuracy : 81.25% 
+Precision : 76.32% 
+Recall : 90.62% 
+F_1 : 82.86% 

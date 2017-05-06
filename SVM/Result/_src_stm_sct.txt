@@ -1,0 +1,5 @@
+_src_stm_sct:  F_1 : 67.42% 
+Accuracy : 54.69% 
+Precision : 52.63% 
+Recall : 93.75% 
+F_1 : 67.42% 

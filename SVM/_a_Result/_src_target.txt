@@ -1,0 +1,5 @@
+_src_target:  F_1 : 82.86% 
+Accuracy : 87.76% 
+Precision : 100.00% 
+Recall : 70.73% 
+F_1 : 82.86% 

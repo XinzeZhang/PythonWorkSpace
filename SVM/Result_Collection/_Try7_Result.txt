@@ -1,0 +1,42 @@
+_src_kld_sct:  F_1 : 77.67% 
+Accuracy : 81.35% 
+Precision : 96.77% 
+Recall : 64.86% 
+F_1 : 77.67% 
+
+_src_knowledge:  F_1 : 69.86% 
+Accuracy : 76.22% 
+Precision : 95.33% 
+Recall : 55.14% 
+F_1 : 69.86% 
+
+_src_sentiment:  F_1 : 94.31% 
+Accuracy : 94.32% 
+Precision : 94.57% 
+Recall : 94.05% 
+F_1 : 94.31% 
+
+_src_society:  F_1 : 77.67% 
+Accuracy : 81.35% 
+Precision : 96.77% 
+Recall : 64.86% 
+F_1 : 77.67% 
+
+_src_stm_kld:  F_1 : 95.91% 
+Accuracy : 95.95% 
+Precision : 96.70% 
+Recall : 95.14% 
+F_1 : 95.91% 
+
+_src_stm_sct:  F_1 : 95.51% 
+Accuracy : 95.41% 
+Precision : 93.30% 
+Recall : 97.84% 
+F_1 : 95.51% 
+
+_src_target:  F_1 : 97.05% 
+Accuracy : 97.03% 
+Precision : 96.28% 
+Recall : 97.84% 
+F_1 : 97.05% 
+
