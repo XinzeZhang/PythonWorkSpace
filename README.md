@@ -1,2 +1,2 @@
 # PythonWorkSpace
-This is a Python-WorkSpace using by xinze.zh
+This is a Python-WorkSpace being used by xinze.zh
