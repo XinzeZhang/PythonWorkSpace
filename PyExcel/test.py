@@ -1,44 +1,22 @@
-# -*- coding: UTF-8 -*-
+import pyodbc as pysql
 
-"""
-this is a  test.py for dealing excel
-"""
-
-import pyexcel as pe
-
-
-def test():
-    """
-    try to deal excel
-    """
-
-    '''
-    records = pe.get_records(file_name="PyExcel\\target.xlsx")
-
-    for record in records:
-        print("%s %d"%(record['ID'], record['Grade']))
-    '''
-
-    arraysteam = pe.get_array(file_name="PyExcel\\teamwork.xlsx")
-    arraystarget = pe.get_array(file_name="PyExcel\\target.xlsx")
-
-    # for array0 in arraysteam:
-    #     for arrayunit in arraystarget:
-    #         if(array0[1] == arrayunit[1]):
-    #             arrayunit.append(array0[3])
-    #             array0.append('Done')
-    #             break
-
-    for array0 in arraysteam:
-        print(array0)
-    print()
-    print("----------------")
-    print()
-    for arrayunit in arraystarget:
-        print(arrayunit)
-
-    # pe.save_as(array=arraysteam, dest_file_name="PyExcel\\teamwork1.xlsx")
-    # pe.save_as(array=arraystarget, dest_file_name="PyExcel\\combine.xlsx")
+conn = pysql.connect(
+    r'DRIVER={ODBC Driver 13 for SQL Server};'
+    r'SERVER=localhost;'
+    r'DATABASE=AccountingEntry;'
+    r'UID=sa;'
+    r'PWD=1231'
+)
+cursor = conn.cursor()
+table = 'create table entry\
+(\
+    entry_id    char(10)    not null,\
+    entry_event varchar(max)   null,\
+    entry_answer    varchar(max)   null\
+)'
 
 
-test()
+cursor.execute(table)
+cursor.commit()
+if cursor.tables(table='entry').fetchone():
+    print('yes it does')
