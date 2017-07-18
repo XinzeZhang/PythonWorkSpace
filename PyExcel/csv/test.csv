@@ -1,0 +1,2 @@
+﻿event,debit_project,debit_subproject,debit_amount,credit_project,credit_suproject,credit_amount
+公司开出现金支票，从银行提取现金5000元，以用于零星开支,库存现金,,5000,,,

@@ -1,8 +1,13 @@
+from __future__ import print_function, unicode_literals
+import sys
 import openpyxl as pyxl
 import pandas as pd
 from openpyxl.utils.dataframe import dataframe_to_rows
+import jieba
+jieba.load_userdict("userdict.txt")
+import jieba.posseg as pseg
 
-inputsheet = pyxl.load_workbook('template.xlsx')
+inputsheet = pyxl.load_workbook('excel\\target.xlsx')
 inputsheet.template = True
 worksheet = inputsheet.active
 
@@ -38,9 +43,18 @@ targetsheet = targetexcel.active
 df = pd.DataFrame(worksheet.values)
 
 for r in dataframe_to_rows(df, index=True, header=True):
-    if r[1]:
-        targetsheet.append(r)
-        print(r)
+    if type(r[2]) == str:
+        entry = '<BOS> ' + (' '.join(jieba.cut(r[2]))) + ' <EOS>'
+        # debit_project = (' '.join(jieba.cut(r[3])))
+        # credit_project = (' '.join(jieba.cut(r[6])))
+        cop = r[3] + str(r[5]) + r[6] + str(r[8])
+        answer = '<BOS> ' + (' '.join(jieba.cut(cop))) + ' <EOS>'
+        row = [r[1], entry, answer]
+        # r[2] = entry
+        # r[3] = debit_project
+        # r[6] = credit_project
+        print(row)
+        targetsheet.append(row)
 
 
-# targetexcel.save('target.xlsx')
+targetexcel.save('entry-answer.xlsx')
