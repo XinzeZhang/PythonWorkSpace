@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite default and user settings.
+{// Place your settings in this file to overwrite the default settings
+    "editor.formatOnSave": false,
+    "files.eol": "\r\n",
+    "files.autoSave": "onFocusChange",
+    "git.enableSmartCommit": true,
+    "editor.wrappingIndent": "same",
+    "editor.autoIndent": true,
+    "editor.renderWhitespace": "all",
+    "python.linting.pylintArgs": ["--extension-pkg-whitelist=torch"]
+}
