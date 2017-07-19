@@ -1,6 +1,6 @@
-﻿0,<BOS> event <EOS>,<BOS> debit _ projectdebit _ amountcredit _ projectcredit _ amount <EOS>
+0,<BOS> event <EOS>,<BOS> debit _ projectdebit _ amountcredit _ projectcredit _ amount <EOS>
 1,<BOS> 公司 开出 现金支票 ， 从 银行 提取 现金 5000 元 ， 以 用于 零星 开支 <EOS>,<BOS> 借方 : 库存现金 5000 贷方 : 银行存款 5000 <EOS>
-2,<BOS> 有限公司 用 现金 200 元 购买 办公用品   <EOS>,<BOS> 借方 : 管理费用 200 贷方 : 库存现金 200 <EOS>
+2,<BOS> 公司 用 现金 200 元 购买 办公用品   <EOS>,<BOS> 借方 : 管理费用 200 贷方 : 库存现金 200 <EOS>
 3,<BOS> 公司 行政 管理 部门 职工 王刚 ， 因 公差 预借 备用金 350 元 。 （ 企业 不 单独 设立 备用金 科目 ）   <EOS>,<BOS> 借方 : 其它应收款 350 贷方 : 库存现金 350 <EOS>
 4,<BOS> 王刚 预借 备用金 350 ， 实际 支出 200 元 ， 剩余 现金 150 元 交回 财会 部门 。 <EOS>,<BOS> 借方 : 管理费用 150 贷方 : 库存现金 150 <EOS>
 5,<BOS> 公司 在 对 现金 进行 清查 时 ， 发现 短缺 60 元 。 上述 现金 短缺 ， 无法 查明 原因 。   <EOS>,<BOS> 借方 : 待处理财产损益 60 贷方 : 库存现金 60 <EOS>
