@@ -5,6 +5,7 @@ import sys
 import jieba
 jieba.load_userdict("userdict.txt")
 import jieba.posseg as pseg
+import jieba.analyse
 
 # jieba.add_word('石墨烯')
 # jieba.add_word('凱特琳')
@@ -15,7 +16,7 @@ test_sent = (
     '以银行存款支付销售乙商品应负担的运输费87000元'
 
 )
-entry = jieba.cut(test_sent)
+entry = jieba.cut(test_sent, HMM=True)
 print(' '.join(entry))
 
 print("=" * 40)
@@ -26,3 +27,20 @@ for w in result:
     print(w.word, "/", w.flag, ", ", end=' ')
 
 print("\n" + "=" * 40)
+
+print('=' * 40)
+print('3. 关键词提取')
+print('-' * 40)
+print(' TF-IDF')
+print('-' * 40)
+
+s = "以银行存款支付销售乙商品应负担的运输费87000元"
+for x, w in jieba.analyse.extract_tags(s, withWeight=True):
+    print('%s %s' % (x, w))
+
+print('-' * 40)
+print(' TextRank')
+print('-' * 40)
+
+for x, w in jieba.analyse.textrank(s, withWeight=True):
+    print('%s %s' % (x, w))
