@@ -1,6 +1,8 @@
 
 from __future__ import unicode_literals, print_function, division
 from io import open
+import os
+
 import unicodedata
 import string
 import re
@@ -372,6 +374,25 @@ def evaluateRandomly(encoder, decoder, n=10):
         print('<', output_sentence)
         print('')
 
+def recordEvaluateRandomly(encoder, decoder, n=10):
+    recordfile=open('_record.txt','a')
+    recordfile.write('\n the record time 2: \n')
+    for i in range(n):
+        pair = random.choice(pairs)
+        output_words, attentions = evaluate(encoder, decoder, pair[0])
+        output_sentence = ' '.join(output_words)
+        # write record log
+        recordfile.write('>'+ pair[0])
+        recordfile.write('='+ pair[1])
+        recordfile.write('<'+ output_sentence)
+        recordfile.write('')
+        # print
+        print('>', pair[0])
+        print('=', pair[1])
+        print('<', output_sentence)
+        print('')
+
+
 hidden_size = 256
 encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
 attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words,
@@ -382,5 +403,6 @@ if use_cuda:
     attn_decoder1 = attn_decoder1.cuda()
 
 # trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
-trainIters(encoder1, attn_decoder1, 15000, print_every=1000)
+trainIters(encoder1, attn_decoder1, 4000, print_every=1000)
 evaluateRandomly(encoder1, attn_decoder1)
+recordEvaluateRandomly(encoder1, attn_decoder1)
