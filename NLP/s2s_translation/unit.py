@@ -437,7 +437,7 @@ def recordEvaluate(encoder, decoder, times):
 # # evaluateRandomly(encoder1, attn_decoder1)
 # recordEvaluate(encoder1, attn_decoder1,1)
 
-def train_recode(train_iters,train_times):
+def train_record(train_iters,train_times):
     hidden_size = 256
     encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
     attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, 1, dropout_p=0.1)
@@ -451,7 +451,7 @@ def train_recode(train_iters,train_times):
     # evaluateRandomly(encoder1, attn_decoder1)
     recordEvaluate(encoder1, attn_decoder1,train_times)
 
-train_recode(4000,1)
-train_recode(8000,2)
-train_recode(12000,3)
-train_recode(16000,4)
+train_record(train_iters=4000,train_times=1)
+train_record(train_iters=8000,train_times=2)
+train_record(train_iters=12000,train_times=3)
+train_record(train_iters=16000,train_times=4)
