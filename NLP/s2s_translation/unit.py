@@ -122,8 +122,8 @@ def prepareData(lang1, lang2, reverse=False):
 
 input_lang, output_lang, pairs = prepareData('event', 'entry', False)
 
-print(pairs)
-print(random.choice(pairs))
+# print(pairs)
+# print(random.choice(pairs))
 
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hidden_size, n_layers=1):
@@ -292,7 +292,7 @@ def showPlot(points):
     plt.savefig('loss.png')
 
 
-def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, learning_rate=0.005):
+def trainIters(encoder, decoder, n_iters, print_every, plot_every=100, learning_rate=0.005):
     start = time.time()
     plot_losses = []
     print_loss_total = 0  # Reset every print_every
@@ -325,7 +325,7 @@ def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, lear
             plot_losses.append(plot_loss_avg)
             plot_loss_total = 0
 
-    showPlot(plot_losses)
+    # showPlot(plot_losses)
 
 def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
     input_variable = variableFromSentence(input_lang, sentence)
@@ -375,12 +375,42 @@ def evaluateRandomly(encoder, decoder, n=10):
         print('<', output_sentence)
         print('')
 
-def recordEvaluateRandomly(encoder, decoder, n=10):
+# def filterPair(p):
+#     return len(p[0].split(' ')) < MAX_LENGTH and \
+#         len(p[1].split(' ')) < MAX_LENGTH 
+        # and \
+        # p[1].startswith(eng_prefixes)
+
+
+# def filterPairs(pairs):
+#     return [pair for pair in pairs if filterPair(pair)]
+
+# def prepareData(lang1, lang2, reverse=False):
+#     input_lang, output_lang, pairs = readLangs(lang1, lang2, reverse)
+#     print("Read %s sentence pairs" % len(pairs))
+#     pairs = filterPairs(pairs)
+#     print("Trimmed to %s sentence pairs" % len(pairs))
+#     print("Counting words...")
+#     for pair in pairs:
+#         input_lang.addSentence(pair[0])
+#         output_lang.addSentence(pair[1])
+#     print("Counted words:")
+#     print(input_lang.name, input_lang.n_words)
+#     print(output_lang.name, output_lang.n_words)
+#     return input_lang, output_lang, pairs
+
+subpairs=[]
+
+for i in range(10):
+    temppair=filterPairs(random.choice(pairs))
+    subpairs.append(temppair)
+
+def recordEvaluate(encoder, decoder, times):
     recordfile=open('_record.txt','a')
     recordfile.write('\n-------------------------------------------------------------')
-    recordfile.write('\n The Record Time : 4 \n')
-    for i in range(n):
-        pair = random.choice(pairs)
+    recordfile.write('\n The Record Time :' +str(times)+ '\n')
+    for i in range(10):
+        pair=subpairs[i]
         output_words, attentions = evaluate(encoder, decoder, pair[0])
         output_sentence = ' '.join(output_words)
         # write record log
@@ -394,16 +424,34 @@ def recordEvaluateRandomly(encoder, decoder, n=10):
         print('<', output_sentence)
         print('')
 
+# hidden_size = 256
+# encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
+# attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, 1, dropout_p=0.1)
 
-hidden_size = 256
-encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
-attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, 1, dropout_p=0.1)
+# if use_cuda:
+#     encoder1 = encoder1.cuda()
+#     attn_decoder1 = attn_decoder1.cuda()
 
-if use_cuda:
-    encoder1 = encoder1.cuda()
-    attn_decoder1 = attn_decoder1.cuda()
+# # trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
+# trainIters(encoder1, attn_decoder1, 1, print_every=1000)
+# # evaluateRandomly(encoder1, attn_decoder1)
+# recordEvaluate(encoder1, attn_decoder1,1)
 
-# trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
-trainIters(encoder1, attn_decoder1, 16000, print_every=1000)
-# evaluateRandomly(encoder1, attn_decoder1)
-recordEvaluateRandomly(encoder1, attn_decoder1)
+def train_recode(train_iters,train_times):
+    hidden_size = 256
+    encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
+    attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, 1, dropout_p=0.1)
+
+    if use_cuda:
+        encoder1 = encoder1.cuda()
+        attn_decoder1 = attn_decoder1.cuda()
+
+    # trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
+    trainIters(encoder1, attn_decoder1, train_iters, print_every=100)
+    # evaluateRandomly(encoder1, attn_decoder1)
+    recordEvaluate(encoder1, attn_decoder1,train_times)
+
+train_recode(4000,1)
+train_recode(8000,2)
+train_recode(12000,3)
+train_recode(16000,4)
