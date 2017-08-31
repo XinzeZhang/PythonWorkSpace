@@ -1,8 +1,6 @@
 
 from __future__ import unicode_literals, print_function, division
 from io import open
-import os
-
 import unicodedata
 import string
 import re
@@ -269,6 +267,7 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
 
     return loss.data[0] / target_length
 
+
 def asMinutes(s):
     m = math.floor(s / 60)
     s -= m * 60
@@ -282,6 +281,7 @@ def timeSince(since, percent):
     rs = es - s
     return '%s (- %s)' % (asMinutes(s), asMinutes(rs))
 
+
 def showPlot(points):
     plt.figure()
     fig, ax = plt.subplots()
@@ -289,7 +289,8 @@ def showPlot(points):
     loc = ticker.MultipleLocator(base=0.2)
     ax.yaxis.set_major_locator(loc)
     plt.plot(points)
-    plt.show(points)
+    plt.savefig('loss.png')
+
 
 def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, learning_rate=0.005):
     start = time.time()
@@ -376,16 +377,17 @@ def evaluateRandomly(encoder, decoder, n=10):
 
 def recordEvaluateRandomly(encoder, decoder, n=10):
     recordfile=open('_record.txt','a')
-    recordfile.write('\n the record time 2: \n')
+    recordfile.write('\n-------------------------------------------------------------')
+    recordfile.write('\n The Record Time : 4 \n')
     for i in range(n):
         pair = random.choice(pairs)
         output_words, attentions = evaluate(encoder, decoder, pair[0])
         output_sentence = ' '.join(output_words)
         # write record log
-        recordfile.write('>'+ pair[0])
-        recordfile.write('='+ pair[1])
-        recordfile.write('<'+ output_sentence)
-        recordfile.write('')
+        recordfile.write('>'+ pair[0]+'\n')
+        recordfile.write('='+ pair[1]+'\n')
+        recordfile.write('<'+ output_sentence+'\n')
+        recordfile.write('\n')
         # print
         print('>', pair[0])
         print('=', pair[1])
@@ -395,14 +397,13 @@ def recordEvaluateRandomly(encoder, decoder, n=10):
 
 hidden_size = 256
 encoder1 = EncoderRNN(input_lang.n_words, hidden_size)
-attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words,
-                               1, dropout_p=0.1)
+attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, 1, dropout_p=0.1)
 
 if use_cuda:
     encoder1 = encoder1.cuda()
     attn_decoder1 = attn_decoder1.cuda()
 
 # trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
-trainIters(encoder1, attn_decoder1, 4000, print_every=1000)
-evaluateRandomly(encoder1, attn_decoder1)
+trainIters(encoder1, attn_decoder1, 16000, print_every=1000)
+# evaluateRandomly(encoder1, attn_decoder1)
 recordEvaluateRandomly(encoder1, attn_decoder1)
