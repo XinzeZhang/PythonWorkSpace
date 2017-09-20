@@ -215,6 +215,7 @@
 import argparse
 import os, sys, socket, struct, select, time, signal
 
+
 __description__ = 'A pure python ICMP ping implementation using raw sockets.'
 
 if sys.platform == "win32":
@@ -224,7 +225,7 @@ else:
     # On most other platforms the best timer is time.time()
     default_timer = time.time
 
-NUM_PACKETS = 10
+NUM_PACKETS = 5
 PACKET_SIZE = 32
 WAIT_TIMEOUT = 1000.0
 
@@ -250,6 +251,9 @@ class MyStats:
 myStats = MyStats # NOT Used globally anymore.
 
 #=============================================================================#
+pinglog = open('pinglog.txt', 'w')
+#=============================================================================#
+
 def checksum(source_string):
     """
     A port of the functionality of in_cksum() from ping.c
@@ -329,6 +333,7 @@ def do_one(myStats, destIP, hostname, timeout, mySeqNumber, packet_size, quiet =
             print("%d bytes from %s: icmp_seq=%d ttl=%d time=%d ms" % (
                 dataSize, socket.inet_ntoa(struct.pack("!I", iphSrcIP)), icmpSeqNumber, iphTTL, delay)
             )
+
         myStats.pktsRcvd += 1
         myStats.totTime += delay
         if myStats.minTime > delay:
@@ -455,6 +460,35 @@ def dump_stats(myStats):
 
     print("")
     return
+#=============================================================================#
+def stats_return(myStats):
+    """
+    Show stats when pings are done
+    """
+    print("\n----%s PYTHON PING Statistics----" % (myStats.thisIP))
+
+    if myStats.pktsSent > 0:
+        myStats.fracLoss = (myStats.pktsSent - myStats.pktsRcvd)/myStats.pktsSent
+
+    packet_loss=100.0 * myStats.fracLoss
+    print("%d packets transmitted, %d packets received, %0.1f%% packet loss" % (
+        myStats.pktsSent, myStats.pktsRcvd, 100.0 * myStats.fracLoss
+    ))
+
+    if myStats.pktsRcvd == 0:
+        minimum='timeout'
+        average='timeout'
+        maximum="timeout"
+    else:
+        minimum=myStats.minTime
+        average=myStats.totTime/myStats.pktsRcvd
+        maximum=myStats.maxTime
+    # if myStats.pktsRcvd > 0:
+    #     # print("round-trip (ms)  min/avg/max = %d/%0.1f/%d" % (
+    #     #     myStats.minTime, myStats.totTime/myStats.pktsRcvd, myStats.maxTime
+    #     # ))
+    print("")
+    return packet_loss,minimum,average,maximum
 
 #=============================================================================#
 def signal_handler(signum, frame):
@@ -484,10 +518,15 @@ def verbose_ping(hostname, timeout=WAIT_TIMEOUT, count=NUM_PACKETS,
     try:
         destIP = socket.gethostbyname(hostname)
         print("\nPYTHON PING %s (%s): %d data bytes" % (hostname, destIP, packet_size))
+        pinglog.writelines("\nPYTHON PING %s (%s): %d data bytes" % (hostname, destIP, packet_size))
     except socket.gaierror as e:
         print("\nPYTHON PING: Unknown host: %s (%s)" % (hostname, e.args[1]))
         print()
-        return
+        packet_loss='NULL'
+        minimum='NULL'
+        average='NULL'
+        maximum='NULL'
+        return packet_loss,minimum,average,maximum
 
     myStats.thisIP = destIP
 
@@ -503,7 +542,12 @@ def verbose_ping(hostname, timeout=WAIT_TIMEOUT, count=NUM_PACKETS,
         if (MAX_SLEEP > delay):
             time.sleep((MAX_SLEEP - delay)/1000)
 
-    dump_stats(myStats)
+    # dump_stats(myStats)
+    packet_loss,minimum,average,maximum=stats_return(myStats)
+    # print("round-trip (ms)   min/avg/max = "+minimum"%d/%0.1f/%d   packet loss=%0.1f " % (
+    #     , average, maximum,packet_loss
+    # ))
+    return packet_loss,minimum,average,maximum
 
 #=============================================================================#
 def quiet_ping(hostname, timeout=WAIT_TIMEOUT, count=NUM_PACKETS,
