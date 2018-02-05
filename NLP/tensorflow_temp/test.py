@@ -61,7 +61,7 @@ def read_data(filename):
     return data
 
 
-filename = 'D:\\Xinze-Home\\Documents\\GitHub\\PythonWorkSpace\\NLP\\tensorflow_temp\\demo.txt'
+filename = 'demo.txt'
 vocabulary = read_data(filename)
 print('Data size', len(vocabulary))
 
