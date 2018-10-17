@@ -8,7 +8,7 @@ from model import classifier
 class PointsClassification:
     def __init__(self):
         self.blueSet = []
-        self.greenSet = []
+        self.redSet = []
         # self.trainSet=[]
         # self.testSet=[]
         self.dataSet = []
@@ -55,13 +55,13 @@ class PointsClassification:
                            command=self.end_points)
         # create label radio button
         self.pointsLabel = tk.IntVar()
-        self.greenPoints = tk.Radiobutton(frame_bt, text="blue", foreground="blue",
+        self.bluePoints = tk.Radiobutton(frame_bt, text="blue: 0", foreground="blue",
                                           variable=self.pointsLabel, value=1, state="disabled", command=self.test)
-        self.redPoints = tk.Radiobutton(frame_bt, text="red", foreground="red",
+        self.redPoints = tk.Radiobutton(frame_bt, text="red: 0", foreground="red",
                                         variable=self.pointsLabel, value=0, state="disabled", command=self.test)
         start_in.grid(row=1, column=1)
         end_in.grid(row=1, column=2)
-        self.greenPoints.grid(row=1, column=3)
+        self.bluePoints.grid(row=1, column=3)
         self.redPoints.grid(row=1, column=4)
 
         self.canvas.bind("<Button 1>", self.printCoords)
@@ -69,14 +69,14 @@ class PointsClassification:
         window.mainloop()
 
     def start_points(self):
-        self.greenPoints.config(state="active")
+        self.bluePoints.config(state="active")
         self.redPoints.config(state="active")
-        self.greenPoints.select()
+        self.bluePoints.select()
         self.pointingStatue = True
 
     def end_points(self):
-        self.greenPoints.deselect()
-        self.greenPoints.config(state="disabled")
+        self.bluePoints.deselect()
+        self.bluePoints.config(state="disabled")
         self.redPoints.deselect()
         self.redPoints.config(state="disabled")
         self.pointingStatue = False
@@ -96,13 +96,15 @@ class PointsClassification:
                     self.canvas.pack()
                     self.blueSet.append(
                         [event.x, event.y, self.pointsLabel.get()])
+                    self.bluePoints["text"]="blue: "+str(len(self.blueSet))
                 elif self.pointsLabel.get() == 0:
                     print("label = red")
                     self.canvas.create_text(
                         event.x, event.y, text='*', fill="red")
                     self.canvas.pack()
-                    self.greenSet.append(
+                    self.redSet.append(
                         [event.x, event.y, self.pointsLabel.get()])
+                    self.redPoints["text"]="red: "+str(len(self.redSet))
         except:
             pass
         # output the x and y coords to terminal
@@ -129,9 +131,9 @@ class PointsClassification:
         blueTest = blueArray[blueTrainNum:, :]
         print(self.blueSet)
 
-        self.greenSet = randomShuffling(self.greenSet)
-        greenArray = np.array(self.greenSet)
-        greenTrainNum = len(self.greenSet)*0.8
+        self.redSet = randomShuffling(self.redSet)
+        greenArray = np.array(self.redSet)
+        greenTrainNum = len(self.redSet)*0.8
         greenTraining = greenArray[:greenTrainNum, :]
         greenTest = greenArray[greenTrainNum:, :]
 

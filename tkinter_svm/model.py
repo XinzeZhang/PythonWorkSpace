@@ -55,7 +55,7 @@ class classifier():
 
         # preprocess dataset, split into training and test part
         X, y = self.X, self.y
-        # X = StandardScaler().fit_transform(X)
+        X = StandardScaler().fit_transform(X)
         X_train, X_test, y_train, y_test = \
             train_test_split(X, y, test_size=.2, random_state=40)
 
