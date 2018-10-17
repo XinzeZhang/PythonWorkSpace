@@ -2,6 +2,8 @@ import tkinter as tk
 import random
 import numpy as np
 
+from model import classifier
+
 
 class PointsClassification:
     def __init__(self):
@@ -9,6 +11,8 @@ class PointsClassification:
         self.greenSet = []
         # self.trainSet=[]
         # self.testSet=[]
+        self.dataSet = []
+        self.labelSet = []
 
         window = tk.Tk()
         window.title('2-Class Points Classification')
@@ -16,6 +20,7 @@ class PointsClassification:
 
         # create a menu bar for choosing kernels
         menubar = tk.Menu(window)
+        '''
         # create a pull-down menu, and add it to the menu bar
         kernelsMenu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Kernels", menu=kernelsMenu)
@@ -24,7 +29,7 @@ class PointsClassification:
         kernelsMenu.add_command(label="demo2", command=self.test)
         kernelsMenu.add_command(label="demo3", command=self.test)
         kernelsMenu.add_command(label="demo4", command=self.test)
-
+        '''
         # create more pull-down menus
         operationMenu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Operation", menu=operationMenu)
@@ -53,7 +58,7 @@ class PointsClassification:
         self.greenPoints = tk.Radiobutton(frame_bt, text="blue", foreground="blue",
                                           variable=self.pointsLabel, value=1, state="disabled", command=self.test)
         self.redPoints = tk.Radiobutton(frame_bt, text="red", foreground="red",
-                                        variable=self.pointsLabel, value=-1, state="disabled", command=self.test)
+                                        variable=self.pointsLabel, value=0, state="disabled", command=self.test)
         start_in.grid(row=1, column=1)
         end_in.grid(row=1, column=2)
         self.greenPoints.grid(row=1, column=3)
@@ -91,7 +96,7 @@ class PointsClassification:
                     self.canvas.pack()
                     self.blueSet.append(
                         [event.x, event.y, self.pointsLabel.get()])
-                elif self.pointsLabel.get() == -1:
+                elif self.pointsLabel.get() == 0:
                     print("label = red")
                     self.canvas.create_text(
                         event.x, event.y, text='*', fill="red")
@@ -101,9 +106,12 @@ class PointsClassification:
         except:
             pass
         # output the x and y coords to terminal
+        self.dataSet.append([event.x, event.y])
+        self.labelSet.append(self.pointsLabel.get())
         print(event.x, event.y)
 
-    def getDataset(self):
+
+    def getSeperatedSet(self):
         # random shuffling
         def randomShuffling(lists):
             matrix = lists
@@ -133,7 +141,10 @@ class PointsClassification:
         return trainSet, testSet
     
     def predict(self):
-        trainSet, testSet = self.getDataset()
+        Data = np.array(self.dataSet)
+        Label = np.array(self.labelSet)
+        models=classifier(data=Data,label=Label)
+        models.fit()
 
 
 PointsClassification()
