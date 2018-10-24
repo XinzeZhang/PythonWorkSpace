@@ -34,22 +34,22 @@ class classifier():
     def fit(self):
         h = .02  # step size in the mesh
 
-        names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Gaussian Process",
-                 "Decision Tree", "Random Forest", "Neural Net", "AdaBoost",
-                 "Naive Bayes", "QDA"]
+        # names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Gaussian Process",
+        #          "Decision Tree", "Random Forest", "Neural Net", "AdaBoost",
+        #          "Naive Bayes", "QDA"]
+        names = ["Linear SVM", "RBF SVM", "Sigmoid SVM",
+                 "Poly SVM", "Decision Tree", "Random Forest", "Nearest Neighbors", "Neural Net"]
 
         classifiers = [
-            KNeighborsClassifier(3),
-            SVC(kernel="linear", C=0.025),
-            SVC(gamma=2, C=1),
-            GaussianProcessClassifier(1.0 * RBF(1.0)),
+            SVC(kernel="linear", C=0.5),
+            SVC(gamma=2, C=0.5),
+            SVC(kernel="sigmoid", C=0.5),
+            SVC(kernel="poly"),
             DecisionTreeClassifier(max_depth=5),
             RandomForestClassifier(
                 max_depth=5, n_estimators=10, max_features=1),
-            MLPClassifier(hidden_layer_sizes=(100,200,),max_iter=1000),
-            AdaBoostClassifier(),
-            GaussianNB(),
-            QuadraticDiscriminantAnalysis()]
+            KNeighborsClassifier(3),
+            MLPClassifier(hidden_layer_sizes=(100, 200,), max_iter=1000)]
 
         figure = plt.figure(figsize=(30, 2.5))
 
@@ -118,10 +118,11 @@ class classifier():
         plt.tight_layout()
         plt.show()
 
+
 if __name__ == '__main__':
 
     X, y = make_classification(n_features=2, n_redundant=0, n_informative=2,
-                           random_state=1, n_clusters_per_class=1)
+                               random_state=1, n_clusters_per_class=1)
     rng = np.random.RandomState(2)
     X += 2 * rng.uniform(size=X.shape)
     linearly_separable = (X, y)
@@ -130,8 +131,8 @@ if __name__ == '__main__':
                 make_circles(noise=0.2, factor=0.5, random_state=1),
                 linearly_separable
                 ]
-    
+
     for ds in datasets:
         X, y = ds
-        models =classifier(data=X, label= y)
+        models = classifier(data=X, label=y)
         models.fit()
