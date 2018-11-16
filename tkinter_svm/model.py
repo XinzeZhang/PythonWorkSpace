@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 print(__doc__)
-
 
 # Code source: Gaël Varoquaux
 #              Andreas Müller
@@ -9,7 +9,7 @@ print(__doc__)
 
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn.model_selection import train_test_split
