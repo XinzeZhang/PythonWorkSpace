@@ -14,33 +14,32 @@ from matplotlib.colors import ListedColormap
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_moons, make_circles, make_classification
-from sklearn.neural_network import MLPClassifier
-from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.neural_network import MLPClassifier
+# from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+# from sklearn.gaussian_process import GaussianProcessClassifier
+# from sklearn.gaussian_process.kernels import RBF
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+# from sklearn.naive_bayes import GaussianNB
+# from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
 h = .02  # step size in the mesh
 
-names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Gaussian Process",
-         "Decision Tree", "Random Forest", "Neural Net", "AdaBoost",
-         "Naive Bayes", "QDA"]
+names = [ "Linear SVM", "RBF SVM"]
 
 classifiers = [
-    KNeighborsClassifier(3),
+    # KNeighborsClassifier(3),
     SVC(kernel="linear", C=0.025),
     SVC(gamma=2, C=1),
-    GaussianProcessClassifier(1.0 * RBF(1.0)),
-    DecisionTreeClassifier(max_depth=5),
-    RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
-    MLPClassifier(alpha=1),
-    AdaBoostClassifier(),
-    GaussianNB(),
-    QuadraticDiscriminantAnalysis()]
+    # GaussianProcessClassifier(1.0 * RBF(1.0)),
+    # DecisionTreeClassifier(max_depth=5),
+    # RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
+    # MLPClassifier(alpha=1),
+    # AdaBoostClassifier(),
+    # GaussianNB(),
+    # QuadraticDiscriminantAnalysis()\
+        ]
 
 X, y = make_classification(n_features=2, n_redundant=0, n_informative=2,
                            random_state=1, n_clusters_per_class=1)
@@ -48,12 +47,13 @@ rng = np.random.RandomState(2)
 X += 2 * rng.uniform(size=X.shape)
 linearly_separable = (X, y)
 
-datasets = [make_moons(noise=0.3, random_state=0),
+datasets = [\
+    make_moons(noise=0.3, random_state=0),
             make_circles(noise=0.2, factor=0.5, random_state=1),
             linearly_separable
             ]
 
-figure = plt.figure(figsize=(30, 6))
+figure = plt.figure(figsize=(9, 9))
 i = 1
 # iterate over datasets
 for ds_cnt, ds in enumerate(datasets):
@@ -79,7 +79,7 @@ for ds_cnt, ds in enumerate(datasets):
                edgecolors='k')
     # Plot the testing points
     ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6,
-               edgecolors='k')
+               edgecolors='k', marker='*')
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
     ax.set_xticks(())
@@ -94,21 +94,22 @@ for ds_cnt, ds in enumerate(datasets):
 
         # Plot the decision boundary. For that, we will assign a color to each
         # point in the mesh [x_min, x_max]x[y_min, y_max].
+        mesh_data = np.c_[xx.ravel(), yy.ravel()] # create test data from mesh grid
         if hasattr(clf, "decision_function"):
-            Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
+            Z = clf.decision_function(mesh_data) # get the predict result of mesh data
         else:
-            Z = clf.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
+            Z = clf.predict_proba(mesh_data)[:, 1]
 
         # Put the result into a color plot
         Z = Z.reshape(xx.shape)
-        ax.contourf(xx, yy, Z, cmap=cm, alpha=.8)
+        ax.contourf(xx, yy, Z, 66, cmap=cm, alpha=0.6) # draw the every mesh grid, distinct them with colors in plt.cm.RdBu
 
         # Plot the training points
         ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright,
                    edgecolors='k')
         # Plot the testing points
         ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright,
-                   edgecolors='k', alpha=0.6)
+                   edgecolors='k', alpha=0.6, marker='*')
 
         ax.set_xlim(xx.min(), xx.max())
         ax.set_ylim(yy.min(), yy.max())
